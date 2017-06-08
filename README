@@ -44,10 +44,15 @@ BLOCKING BEHAVIOR AND TIMEOUTS
   or an applicable client timeout expires. schlep's timeouts are defined in
   src/conf.lisp.
 
-  Long-running groovy scripts executed via rungroovy or allgroovy should run
-  and return their output documents as expected if the script's execution time
-  is less than *worker-thread-timeout*. In such cases schlep should be protected
-  from inadvertent early termination, e.g. via nohup or screen. 
+  Long-running groovy scripts should return their output documents as expected
+  for a given target if *worker-thread-timeout* is greater than the total time
+  consumed by the script execution(s) on that target. In rungroovy's case, this
+  is simply the time it takes for the webapp to run the script once. In
+  allgroovy's case, it will be the product of the target's nodecount and the
+  time it takes to run the script once.
+
+  When invoking long-running groovy scripts, schlep should be protected from
+  inadvertent early termination e.g. by running it via nohup or screen.
 
 
 
