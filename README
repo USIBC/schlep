@@ -46,10 +46,10 @@ BLOCKING BEHAVIOR AND TIMEOUTS
 
   Long-running groovy scripts should return their output documents as expected
   for a given target if *worker-thread-timeout* is greater than the total time
-  consumed by the script execution(s) on that target. In rungroovy's case, this
-  is simply the time it takes for the webapp to run the script once. In
-  allgroovy's case, it will be the product of the target's nodecount and the
-  time it takes to run the script once.
+  consumed by script execution on that target. In rungroovy's case, this is
+  simply the time required by the webapp to run the script once. In allgroovy's
+  case, it will be the product of the target's nodecount and the time required
+  for a single execution of the script.
 
   When invoking long-running groovy scripts, schlep should be protected from
   inadvertent early termination e.g. by running it via nohup or screen.
