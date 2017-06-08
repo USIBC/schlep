@@ -21,7 +21,7 @@
   (let ((u (s+ (target-url (get-target id)) path)))
     (multiple-value-bind (body statcode)
         (http-request u :method :get :cookie-jar cj
-                      :connection-timeout *get-timeout*)
+                      :connection-timeout *connect-timeout*)
       (when (= statcode 200) (parse body)))))
 
 
@@ -42,7 +42,7 @@
                     :parameters (make-postdata (form-inputs f)) :form-data t
                     :cookie-jar (form-cookiejar f)
                     :want-stream want-stream
-                    :connection-timeout *post-timeout*)
+                    :connection-timeout *connect-timeout*)
     (if want-stream (values s headers statcode) (when (= statcode 200) statcode))))
 
 

@@ -2,25 +2,19 @@
 ;;; D. Racine 20170503
 
 (in-package :cl-user)
-
 (defpackage :schlep (:use :cl :cl-ppcre :patron :drakma :plump))
-
 (in-package :schlep)
 
 
-;; General configuration items. Timeout values are in seconds.
+;; General configuration items
 
-(defparameter *concurrency-limit* 6)
+(defparameter *concurrency-limit* 12)
 
-(defparameter *login-timeout* 30)
+(defparameter *connect-timeout* 30) ;seconds
 
-(defparameter *get-timeout* 30)
+(defparameter *worker-thread-timeout* 3600) ;seconds
 
-(defparameter *post-timeout* 1800)
-
-(defparameter *worker-thread-timeout* 1890)
-
-(defparameter *find-new-node-retry-limit* 30) ;only relevant to allgroovy
+(defparameter *find-new-node-retry-limit* 30) ;applies only to allgroovy
 
 (defparameter *password-password* "an_arbitrary_string")
 

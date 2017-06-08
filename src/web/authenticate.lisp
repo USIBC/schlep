@@ -12,7 +12,7 @@
     (multiple-value-bind (body statcode headers uri stream mustclose statmsg)
         (http-request (s+ (target-url x) *login-path*) :method :post
                       :parameters (make-login-postdata u (target-pass x))
-                      :cookie-jar cj :connection-timeout *login-timeout*)
+                      :cookie-jar cj :connection-timeout *connect-timeout*)
       (declare (ignore headers uri stream mustclose statmsg))
       (cond
         ((and (= statcode 200) (find "JSESSIONID" (cookie-jar-cookies cj)
