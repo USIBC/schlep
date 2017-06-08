@@ -45,5 +45,5 @@
                                                 :infile infile)))))
       (setq results (schmeer jobfn ids)))
     (setq fails (remove-if #'second results))
-    (when fails (print-fails-and-quit "(run|all)groovy probably" fails 1))))
+    (when fails (print-fails-and-quit (if all "allgroovy" "rungroovy") fails 1))))
       

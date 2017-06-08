@@ -34,7 +34,7 @@
 
 
 (defun download (instream filepath)
-  (with-open-file (outstream filepath :direction :output :if-exists :supersede
+  (with-open-file (outstream filepath :direction :output :if-exists :rename
                              :element-type '(unsigned-byte 8))
     (stream-copy instream outstream '(unsigned-byte 8))))
 

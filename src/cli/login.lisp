@@ -14,7 +14,4 @@
   "idlist is the list of target id strings as specified on the CLI"
   (let* ((results (schmeer #'login-job idlist))
          (fails (remove-if #'second results)))
-    (when fails
-      (dolist (i (sort fails #'string-lessp :key #'car))
-        (stderr (format nil "~4,,,a  ~10,,,a  ~a" (first i) (third i) (fourth i))))
-      (stderr "at least one login failed, exiting with nonzero status" 1))))
+    (when fails (print-fails-and-quit "login" fails 1))))

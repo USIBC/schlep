@@ -12,26 +12,19 @@
   (let* ((spec (remove-duplicates idlist :test #'string=))
          (ids (remove-if-not #'get-target spec))
          (bad (set-difference spec ids :test #'string=))
-         (*print-pretty* nil)
-         (results
-          (cond
-            ((> (length bad) 0)
-             (stderr (s+ "Unknown target(s): "
-                         (string-trim "()" (princ-to-string bad))))
-             (stderr
-              "No action attempted on any targets. Exiting with nonzero status." 2))
-            ((< (length ids) 1)
-             (stderr "No targets specified, no action taken." 2))
-            (t (run-job jobfn ids))))
+         (results (if (zerop (length ids))
+                      (stderr "No known targets specified, no action taken." 2)
+                      (run-job jobfn ids)))
          recon)
     (loop
        while (setq recon (set-difference ids (mapcar #'car results)))
        do (setq results (append results (run-job jobfn recon))))
-    results))
+    (append results (mapcar (lambda (x) (list x nil "unknown target")) bad))))
 
 
 (defun print-fails-and-quit (desc fails exit-status)
   (stderr (s+ desc " failed for:"))
   (dolist (i (sort fails #'string-lessp :key #'car))
-    (stderr (s+ "  " (princ-to-string (car i)) "  " (princ-to-string (third i)))))
+    (stderr (s+ "  " (format nil "~4,,,a" (car i)) "  "
+                (reduce (lambda (x y) (s+ x "  " y)) (or (nthcdr 2 i) '(""))))))
   (stderr "Exiting with nonzero status" exit-status))
