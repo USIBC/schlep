@@ -4,12 +4,30 @@
 (in-package :schlep)
 
 
-(defun schmeer (jobfn idlist)
-  "Validates idlist then calls jobfn on each unique member of idlist via run-job, then
+(defparameter *cmd-dispatch-table* (make-hash-table :test 'equal)
+  "command:handler; 'command' is a string and 'handler' is a function of one arg,
+  expected to be a list of strings representing the args and targets specified after
+  the command on the CLI.")
+
+
+(defun defhandler (command handler-fn)
+  (setf (gethash command *cmd-dispatch-table*) handler-fn))
+
+
+(defun dispatch (c)
+  "c is a list of strings (command [arguments] [targets]) as specified on the CLI"
+  (let ((handler (gethash (car c) *cmd-dispatch-table*)))
+    (if handler
+        (funcall handler (cdr c))
+        (stderr (s+ "unknown command " (prin1-to-string (car c))) 2))))
+
+
+(defun schmeer (jobfn appids)
+  "Validates appids then calls jobfn on each unique member of appids via run-job, then
   reconciles run-job's results with its input, re-running jobfn on a subset of ids if
   necessary. Returns a list of jobfn(id) return values. jobfn is expected to return a
   list of the form (id results) given an app id as input."
-  (let* ((spec (remove-duplicates idlist :test #'string=))
+  (let* ((spec (remove-duplicates appids :test #'string=))
          (ids (remove-if-not #'get-target spec))
          (bad (set-difference spec ids :test #'string=))
          (results (if (zerop (length ids))

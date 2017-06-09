@@ -6,7 +6,7 @@
 
 (defun target-cmd (args)
   "args is a list of strings denoting target's args as specified on the CLI"
-  (flet ((arg1-is (s) (string-equal (car args) s)))
+  (flet ((arg1-is (s) (string= (car args) s)))
     (cond
       ((arg1-is "list")
        (format t "~4,,,a  ~30,,,a  ~9,,,a  ~a~%" "id" "baseURL" "nodecount" "user")
@@ -22,3 +22,6 @@
            (remove-target (second args))
            (stderr (s+ "unknown target " (prin1-to-string (second args))) 2)))
       (t (stderr "target: unknown or insufficient arguments" 2)))))
+
+
+(defhandler "target" #'target-cmd)

@@ -30,3 +30,8 @@
          (fails (remove-if #'second results)))
     (when fails
       (print-fails-and-quit (s+ (string action) " action") fails 1))))
+
+
+(defhandler "showmode" #'showmode-cmd)
+(defhandler "lock" (lambda (l) (set-runmode-cmd 'lock l)))
+(defhandler "unlock" (lambda (l) (set-runmode-cmd 'unlock l)))

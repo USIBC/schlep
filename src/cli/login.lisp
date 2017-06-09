@@ -15,3 +15,6 @@
   (let* ((results (schmeer #'login-job idlist))
          (fails (remove-if #'second results)))
     (when fails (print-fails-and-quit "login" fails 1))))
+
+
+(defhandler "login" #'login-cmd)

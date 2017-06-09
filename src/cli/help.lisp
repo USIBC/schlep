@@ -11,37 +11,6 @@
           "For more info: schlep help"))
 
 
-(defun help-cmd (&optional cmd)
-  (flet ((cmd-is (s) (string-equal cmd s)))
-    (cond
-      ((stringp cmd)
-       (cond
-         ((cmd-is "help") (help-cmd))
-         ((cmd-is "target") (target-help))
-         ((cmd-is "login") (login-help))
-         ((or (cmd-is "showmode")
-              (cmd-is "lock")
-              (cmd-is "unlock")) (runmode-help))
-         ((cmd-is "rungroovy") (rungroovy-help))
-         ((cmd-is "allgroovy") (allgroovy-help))
-         (t (stderr (s+ "unknown command " (prin1-to-string cmd)) 2))))
-      (t
-       (usage)
-       (format t "~a~%~%"
-               "command    arguments
----------  --------------------------------------
-allgroovy  scriptfile|- [inputfile]
-help       [command]
-lock
-login
-rungroovy  scriptfile|- [inputfile]
-showmode
-target     list
-           remove id
-           add id baseURL nodecount user password
-unlock")))))
-
-
 (defun target-help ()
   (format t "~%~a~%~%"
           (s+ "schlep target list
@@ -124,3 +93,48 @@ response to POSTing the Script Execution form. This does not necessarily mean
 that the script had its intended effect, as such can be determined only by
 interpreting the content of the script's output document in relation to any
 expected functionality or content changes within the web application."))
+
+
+(defun exec-help ()
+  (format t "~%~a~%~%"
+          "schlep exec lispfile|- [args] [targets]
+
+Loads and runs the schlep extension defined in lispfile. All schlep command line
+arguments and targets provided after lispfile are available to the code in
+lispfile via the 'exec-args' variable.
+
+To execute lisp code fed to schlep's standard input, use a '-' character in
+place of the 'lispfile' parameter."))
+
+
+(defun help-cmd (&optional arg)
+  (flet ((arg-is (s) (string= arg s)))
+    (if (stringp arg)
+        (cond
+          ((arg-is "help") (help-cmd))
+          ((arg-is "target") (target-help))
+          ((arg-is "login") (login-help))
+          ((or (arg-is "showmode")
+               (arg-is "lock")
+               (arg-is "unlock")) (runmode-help))
+          ((arg-is "rungroovy") (rungroovy-help))
+          ((arg-is "allgroovy") (allgroovy-help))
+          ((arg-is "exec") (exec-help))
+          (t (stderr (s+ "unknown command " (prin1-to-string arg)) 2)))
+        (progn (usage) (format t "~a~%~%"
+                               "command    arguments
+---------  --------------------------------------
+allgroovy  scriptfile|- [inputfile]
+exec       lispfile|- [args]
+help       [command]
+lock
+login
+rungroovy  scriptfile|- [inputfile]
+showmode
+target     list
+           remove id
+           add id baseURL nodecount user password
+unlock")))))
+
+
+(defhandler "help" (lambda (l) (help-cmd (car l))))

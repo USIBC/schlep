@@ -47,3 +47,6 @@
     (setq fails (remove-if #'second results))
     (when fails (print-fails-and-quit (if all "allgroovy" "rungroovy") fails 1))))
       
+
+(defhandler "rungroovy" #'rungroovy-cmd)
+(defhandler "allgroovy" (lambda (l) (rungroovy-cmd l :all t)))
