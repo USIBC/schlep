@@ -12,6 +12,7 @@ SUMMARY
       command    arguments
       ---------  --------------------------------------
       allgroovy  scriptfile|- [inputfile]
+      exec       lispfile|- [args]
       help       [command]
       lock
       login

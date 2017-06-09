@@ -99,12 +99,14 @@ expected functionality or content changes within the web application."))
   (format t "~%~a~%~%"
           "schlep exec lispfile|- [args] [targets]
 
-Loads and runs the schlep extension defined in lispfile. All schlep command line
-arguments and targets provided after lispfile are available to the code in
-lispfile via the 'exec-args' variable.
+Executes the schlep extension defined in lispfile in the 'schlep' package.
+All schlep command line arguments and targets specified after lispfile are
+available to the code in lispfile via the *exec-args* variable.
 
-To execute lisp code fed to schlep's standard input, use a '-' character in
-place of the 'lispfile' parameter."))
+To execute an extension fed to schlep's standard input, use a '-' character
+in place of the 'lispfile' argument.
+
+WARNING: 'schlep exec' is a hook for executing arbitrary Common Lisp code."))
 
 
 (defun help-cmd (&optional arg)

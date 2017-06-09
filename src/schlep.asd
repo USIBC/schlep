@@ -2,7 +2,7 @@
 
 (defsystem :schlep
   :author "Darren Racine <dracine@ibc.doi.gov>"
-  :description "An Automation Tool for a Time & Attendance Web Application"
+  :description "Automates a time & attendance app via its web UI"
   :depends-on (:cl-ppcre :ironclad :patron :drakma :plump)
   :serial t
   :components
@@ -30,4 +30,5 @@
              (:file "login")
              (:file "lock-unlock")
              (:file "rungroovy")
+             (:file "exec")
              (:file "top")))))
