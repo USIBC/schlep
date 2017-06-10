@@ -32,9 +32,8 @@ OUTPUT
   Standard output and error: Succeeds silently and fails loudly, except in use
   cases designed to display information (e.g. help, target list, showmode). 
 
-  Output documents produced by instances of groovy script execution invoked by
-  rungroovy and allgroovy are written to files in schlep's current working
-  directory.
+  Output documents produced by instances of groovy script execution are written
+  to files in schlep's current working directory.
 
 
 
@@ -59,8 +58,8 @@ BLOCKING BEHAVIOR AND TIMEOUTS
 
 EXIT STATUS
 
-  0  All actions completed successfully. Any nonzero exit status indicates that
-     schlep is unable to assert that all actions were successful.
+  0  All actions completed successfully. Any nonzero exit status means schlep
+     is unable to assert that all actions were successful.
 
   1  One or more actions failed, some may have succeeded. Failed actions are
      documented in messages printed to standard error.
@@ -69,9 +68,8 @@ EXIT STATUS
 
   3  schlep asserts that all of the requested actions failed.
 
-  Note that rungroovy and allgroovy operations are considered successful if
-  schlep receives an HTTP 200 in response to POSTing the Script Execution form.
-  This does not necessarily mean that the posted groovy script had its intended
-  effect, as such can be determined only by interpreting the content of the
-  script's output document in relation to any expected functionality or content
-  changes within the web application.
+  Instances of groovy script execution are considered successful if schlep
+  receives an HTTP 200 in response to POSTing the Script Execution form. This
+  does not necessarily mean that the script had its intended effect, as such can
+  be determined only by interpreting the content of the script's output document
+  in relation to any expected changes within the web application.

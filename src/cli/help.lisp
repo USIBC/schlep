@@ -4,11 +4,14 @@
 (in-package :schlep)
 
 
-(defun usage ()
-  (format t "~%~a~%~%~a~%~a~%~%"
-          "usage: schlep command [arguments] [targets]"
-          "Applies 'command [arguments]' to target app instances."
-          "For more info: schlep help"))
+(defun usage (&key no-more-info)
+  (format t "~%~a~%"
+          "usage: schlep command [arguments] [targets]
+
+Applies 'command [arguments]' to target app instances.")
+  (if no-more-info
+      (format t "~%")
+      (format t "~a~%~%" "See 'schlep help' for more info.")))
 
 
 (defun target-help ()
@@ -64,7 +67,7 @@ Script execution is considered successful if schlep receives an HTTP 200 in
 response to POSTing the Script Execution form. This does not necessarily mean
 that the script had its intended effect, as such can be determined only by
 interpreting the content of the script's output document in relation to any
-expected functionality or content changes within the web application."))
+expected changes within the web application."))
 
 
 (defun allgroovy-help ()
@@ -92,7 +95,7 @@ Script execution is considered successful if schlep receives an HTTP 200 in
 response to POSTing the Script Execution form. This does not necessarily mean
 that the script had its intended effect, as such can be determined only by
 interpreting the content of the script's output document in relation to any
-expected functionality or content changes within the web application."))
+expected changes within the web application."))
 
 
 (defun exec-help ()
@@ -123,8 +126,9 @@ WARNING: 'schlep exec' is a hook for executing arbitrary Common Lisp code."))
           ((arg-is "allgroovy") (allgroovy-help))
           ((arg-is "exec") (exec-help))
           (t (stderr (s+ "unknown command " (prin1-to-string arg)) 2)))
-        (progn (usage) (format t "~a~%~%"
-                               "command    arguments
+        (progn (usage :no-more-info t)
+               (format t "~a~%~%"
+                       "command    arguments
 ---------  --------------------------------------
 allgroovy  scriptfile|- [inputfile]
 exec       lispfile|- [args]
