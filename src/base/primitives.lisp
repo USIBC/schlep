@@ -45,20 +45,3 @@
     (cond ((streamp x) (stream-copy x out 'character))
           ((probe-file x) (with-open-file (in x) (stream-copy in out 'character)))
           (t nil))))
-
-
-(defun tz-dst-map (tz dst-p)
-  (let ((z (cdr (assoc tz '((5 . "E") (6 . "C") (7 . "M") (8 . "P")))))
-        (d (if dst-p "DT" "ST")))
-    (if z (s+ z d) (s+ "TZ" (princ-to-string tz) d))))
-
-
-(defun timestr ()
-  "Returns the current system date & time as a string"
-  (multiple-value-bind (sec min hour day month year weekday dst-p tz)
-      (get-decoded-time)
-    (with-output-to-string (s)
-      (format s "~a ~d-~2,'0d-~2,'0d ~2,'0d:~2,'0d:~2,'0d ~a"
-              (nth weekday '("Mon" "Tue" "Wed" "Thu" "Fri" "Sat" "Sun"))
-              year month day hour min sec
-              (tz-dst-map tz dst-p)))))
