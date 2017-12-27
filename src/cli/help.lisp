@@ -50,7 +50,7 @@
   instance's Script Execution screen and reports any failures. 
 
   The outputs of the script executions are written to files in the PWD with
-  names of the form '{target_id}-{scriptfile_basename}-out.{ext}
+  names of the form {target_id}-{scriptfile_basename}-out.{ext}
 
   The content of each output file will be formatted according to the webapp's
   interpretation of the output directives in the groovy script, e.g. HTML, CSV,
@@ -76,7 +76,7 @@
   shut down any webapp nodes.
 
   The outputs of the script executions are written to files in the PWD with
-  names of the form '{target_node_id}-{scriptfile_basename}-out.{ext}
+  names of the form {target_node_id}-{scriptfile_basename}-out.{ext}
 
   The content of each output file will be formatted according to the webapp's
   interpretation of the output directives in the groovy script, e.g. HTML, CSV,
