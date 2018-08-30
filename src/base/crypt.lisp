@@ -3,8 +3,6 @@
 
 (in-package :schlep)
 
-(defparameter *padlength* 16)
-
 
 (defun make-key (salt pass)
   "Returns a 16-element key based on arbitrary salt and password strings"
@@ -13,13 +11,17 @@
                        (ironclad:ascii-string-to-byte-array salt) 4 16))
 
 
-(defun get-cipher (key) (ironclad:make-cipher :aes :mode :ecb :key key))
+(defun get-cipher (key)
+  (ironclad:make-cipher
+   :aes :mode :ofb :key key
+   :initialization-vector (make-array '(16)
+                                      :element-type '(unsigned-byte 8)
+                                      :initial-element 0)))
 
 
 (defun encrypt (pt salt pass)
   (let* ((cipher (get-cipher (make-key salt pass)))
-         (pad (make-string *padlength* :initial-element #\.))
-         (msg (ironclad:ascii-string-to-byte-array (s+ pt pad))))
+         (msg (ironclad:ascii-string-to-byte-array pt)))
     (ironclad:encrypt-in-place cipher msg)
     (ironclad:octets-to-integer msg)))
 
@@ -28,5 +30,4 @@
   (let ((cipher (get-cipher (make-key salt pass)))
         (msg (ironclad:integer-to-octets ct-int)))
     (ironclad:decrypt-in-place cipher msg)
-    (subseq (coerce (mapcar #'code-char (coerce msg 'list)) 'string)
-            0 (- (length msg) *padlength*))))
+    (coerce (mapcar #'code-char (coerce msg 'list)) 'string)))
