@@ -6,7 +6,7 @@
 
 (defstruct form
   "Represents an instance of a specific web form with an active session."
-  path appid cookiejar inputs)
+  path appid cookiejar dom inputs)
 
 
 (defstruct input
@@ -31,7 +31,7 @@
     (mapcar (lambda (x) (cons (input-id x) (input-value x))) (cons submit fields))))
 
 
-(defun postform (f &key want-stream)
+(defun postform (f &key want-stream extra-parameters)
   "POSTs form struct instance f. If want-stream is nil, postform returns nil if
   the app returns anything other than HTTP 200. Note 200 does NOT indicate that
   the intent of the post operation succeeded. If want-stream is t, postform returns
@@ -39,11 +39,14 @@
   (multiple-value-bind (s statcode headers)
       (http-request (s+ (target-url (get-target (form-appid f))) (form-path f))
                     :method :post
-                    :parameters (make-postdata (form-inputs f)) :form-data t
+                    :parameters (append (make-postdata (form-inputs f)) extra-parameters)
+                    :form-data t
                     :cookie-jar (form-cookiejar f)
                     :want-stream want-stream
                     :connection-timeout *connect-timeout*)
-    (if want-stream (values s headers statcode) (when (= statcode 200) statcode))))
+    (if want-stream
+        (values s headers statcode)
+        (when (= statcode 200) (values statcode s)))))
 
 
 (defun get-filename-extension (headers)
@@ -155,7 +158,9 @@
        (cond
          (,session-failure-msg (values nil ,session-failure-msg))
          ((null ,doc) (values nil "getpage failed"))
-         (t (setf (form-inputs ,var) (append (buttons ,doc)
-                                             (labeled-inputs ,doc)
-                                             (hidden-inputs ,doc)))
+         (t (setf
+             (form-dom ,var) ,doc
+             (form-inputs ,var) (append (buttons ,doc)
+                                        (labeled-inputs ,doc)
+                                        (hidden-inputs ,doc)))
             ,@body)))))
