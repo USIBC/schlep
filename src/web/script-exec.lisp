@@ -59,7 +59,7 @@
        (rg-result '("")))
       ((or (>= (length nodes-done) stoplen)
            (not (stringp (car rg-result))))
-       (if (>= (length nodes-done) stoplen) nodes-done (apply #'values rg-result)))
+       (if (not (stringp (car rg-result))) (apply #'values rg-result) nodes-done))
     (setq rg-result (multiple-value-list (rungroovy id
                                                     :script-string script-string
                                                     :outfile-basename outfile-basename
