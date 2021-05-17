@@ -33,6 +33,13 @@
   Log into the specified target webapp instances and report any failures."))
 
 
+(defun about-help ()
+  (format t "~%~a~%~%"
+          "  schlep about targets
+
+  Display the version on the \"About\" page of the target webapp instances."))
+
+
 (defun runmode-help ()
   (format t "~%~a~%~%"
           "  schlep showmode targets
@@ -119,11 +126,13 @@
           ((arg-is "rungroovy") (rungroovy-help))
           ((arg-is "allgroovy") (allgroovy-help))
           ((arg-is "exec") (exec-help))
+          ((arg-is "about") (about-help))
           (t (stderr (s+ "unknown command " (prin1-to-string arg)) 2)))
         (progn (usage :no-more-info t)
                (format t "~a~%~%"
                        "  command    arguments
   ---------  --------------------------------------
+  about
   allgroovy  scriptfile|- [inputfile]
   exec       lispfile|- [args]
   help       [command]

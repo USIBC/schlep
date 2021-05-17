@@ -20,7 +20,8 @@
             ((:file "web-util")
              (:file "authenticate")
              (:file "runmode")
-             (:file "script-exec")))
+             (:file "script-exec")
+             (:file "version")))
    (:module "cli"
             :serial t
             :components
@@ -31,4 +32,5 @@
              (:file "lock-unlock")
              (:file "rungroovy")
              (:file "exec")
+             (:file "about")
              (:file "top")))))

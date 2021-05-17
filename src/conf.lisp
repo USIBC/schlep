@@ -41,6 +41,12 @@
     ("loginButton" . "loginButton")))
 
 
+;; About operations
+
+(defparameter *about-path* "/About")
+(defparameter *version-field-label* "[Vv]ersion")
+
+
 ;; Run Mode operations
 
 (defparameter *appmgmt-path* "/ApplicationManagement")
